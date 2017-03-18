@@ -135,11 +135,23 @@ void Rem_meio(Lista *r)
 	free(r);
 }
 
-void Rem_ocor(Lista *Inicio, int v)
+void Rem_ocor(Lista **Inicio)
 {
-	Lista *p, Lista *r;
-	p = Inicio;
-
+	Lista *p;
+	Lista *r;
+	p = *Inicio;
+	r = p->dir;
+	
+	while ((r != p) && (r != NULL))
+	{
+		r = r->dir;
+		if (r == p)
+		{
+			r = r->dir;
+			free(r);
+		}
+		p->dir = r->esq;
+	}
 }
 
 main()
@@ -253,9 +265,21 @@ main()
 		    		getch();
 		    		break;
 
-		    case 9:;
-
-			        
+		    case 9: printf("\nDigite o valor a ser removido:\n");
+		    		scanf("%d", &val);
+		    		
+		    		r = Consulta(Inicio,val);
+		    		
+		    		if(r == NULL)
+		    			printf("\nValor nao existe!");
+		    		else
+		    		{
+		    			Rem_ocor(&Inicio,val);
+		    			printf("\nTodas as ocorrencias foram removidas!");
+		    			Imprime(Inicio);
+		    		}
+					getch();
+					break;			        
 		}		
 	} while (op!=0);
 	
